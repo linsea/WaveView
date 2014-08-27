@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Path.Direction;
+import android.graphics.Region.Op;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -23,6 +25,7 @@ public class WaveView extends View {
 
     private Paint aboveWavePaint = new Paint();
     private Paint blowWavePaint = new Paint();
+    
 
     private final int default_above_wave_alpha = 50;
     private final int default_blow_wave_alpha = 30;
@@ -77,7 +80,14 @@ public class WaveView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        int width = getWidth();
+		Path circlePath = new Path();
+		circlePath.reset();
+		circlePath.addCircle(width / 2, width / 2, width / 2,
+					Direction.CCW);
+		// canvas添加限制,让接下来的绘制都在园内
+		canvas.clipPath(circlePath, Op.REPLACE);
+		canvas.drawCircle(getWidth()/2, getHeight()/2, getWidth()/2, blowWavePaint);
         canvas.drawPath(blowWavePath, blowWavePaint);
         canvas.drawPath(aboveWavePath, aboveWavePaint);
     }
