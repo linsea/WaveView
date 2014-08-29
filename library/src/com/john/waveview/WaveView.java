@@ -20,7 +20,7 @@ public class WaveView extends View {
 
     private Path aboveWavePath = new Path();
     private Path blowWavePath = new Path();
-
+    private Path circlePath = new Path();
     private Paint aboveWavePaint = new Paint();
     private Paint blowWavePaint = new Paint();
 
@@ -78,6 +78,18 @@ public class WaveView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        super.onDraw(canvas);
+        int width = getWidth();
+        int height = getHeight();
+        int radius = width < height ? width / 2 : height / 2;
+        
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, circleBoundPaint);
+
+        circlePath.reset();
+        circlePath.addCircle(getWidth() / 2, getHeight() / 2, radius, Direction.CW);
+        // canvas添加限制,让接下来的绘制都在园内
+        canvas.clipPath(circlePath, Op.INTERSECT);
+        
         canvas.drawPath(blowWavePath, blowWavePaint);
         canvas.drawPath(aboveWavePath, aboveWavePaint);
     }
